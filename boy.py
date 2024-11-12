@@ -62,8 +62,23 @@ class Sleep:
             boy.action = 3
         boy.frame = 0
 
+        if boy.face_dir == 1:
+            boy.b_x1 = 75
+            boy.b_y1 = 40
+            boy.b_x2 = 18
+            boy.b_y2 = 5
+        else:
+            boy.b_x1 = 18
+            boy.b_y1 = 40
+            boy.b_x2 = 70
+            boy.b_y2 = 5
+
     @staticmethod
     def exit(boy, e):
+        boy.b_x1 = 20
+        boy.b_y1 = 50
+        boy.b_x2 = 20
+        boy.b_y2 = 50
         pass
 
     @staticmethod
@@ -115,6 +130,10 @@ class Boy:
         self.x, self.y = 400, 90
         self.face_dir = 1
         self.ball_count = 10
+        self.b_x1 = 20
+        self.b_y1 = 50
+        self.b_x2 = 20
+        self.b_y2 = 50
         self.font = load_font('ENCR10B.TTF', 16)
         self.image = load_image('animation_sheet.png')
         self.state_machine = StateMachine(self)
@@ -150,7 +169,7 @@ class Boy:
     def get_bb(self):  # 바운딩 박스인가?
         # fill here
         # 네개의 값을 리턴하는데, 사실은 한개의 튜플을 리턴함.
-        return self.x - 20, self.y - 50, self.x + 20, self.y + 50
+        return self.x - self.b_x1, self.y - self.b_y1, self.x + self.b_x2, self.y + self.b_y2
         pass
 
     def handle_collision(self, group, other):
