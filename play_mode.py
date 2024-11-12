@@ -43,12 +43,16 @@ def init():
     #     game_world.add_collision_pair('boy:ball', None, ball)
     #     game_world.add_collision_pair('zombie:ball', None, ball)
 
-    #zombie 5 add
+    game_world.add_collision_pair('zombie:boy', None, boy)
+
+    # zombie 5 add
     zombies = [Zombie() for _ in range(5)]
     game_world.add_objects(zombies, 1)
 
     for zombie in zombies:
         game_world.add_collision_pair('zombie:ball', zombie, None)
+        game_world.add_collision_pair('zombie:boy', zombie, None)
+
 
 
 def finish():
@@ -59,6 +63,7 @@ def finish():
 def update():
     game_world.update()  # 소년과 볼 위치가 다 업데이트 완료
     game_world.handle_collisions()
+
 
 def draw():
     clear_canvas()
