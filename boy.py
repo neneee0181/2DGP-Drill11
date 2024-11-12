@@ -157,5 +157,10 @@ class Boy:
         # fill here
         if group == 'boy:ball':
             self.ball_count += 1
+        if group == 'zombie:boy':
+            game_world.remove_object(self)
+            print("boy 가 졌습니다.")
+            game_framework.quit()
+
 
     pass
