@@ -19,6 +19,7 @@ FRAMES_PER_ACTION = 10.0
 
 animation_names = ['Walk']
 
+
 class Zombie:
     images = None
 
@@ -26,14 +27,16 @@ class Zombie:
         if Zombie.images == None:
             Zombie.images = {}
             for name in animation_names:
-                Zombie.images[name] = [load_image("./zombie/"+ name + " (%d)" % i + ".png") for i in range(1, 11)]
+                Zombie.images[name] = [load_image("./zombie/" + name + " (%d)" % i + ".png") for i in range(1, 11)]
 
     def __init__(self):
-        self.x, self.y = random.randint(1600-800, 1600), 150
+        self.x, self.y = random.randint(1600 - 800, 1600), 150
         self.load_images()
         self.frame = random.randint(0, 9)
-        self.dir = random.choice([-1,1])
-
+        self.dir = random.choice([-1, 1])
+        self.size_x = 200
+        self.size_y = 200
+        self.die_cnt = 2
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
@@ -45,12 +48,11 @@ class Zombie:
         self.x = clamp(800, self.x, 1600)
         pass
 
-
     def draw(self):
         if self.dir < 0:
-            Zombie.images['Walk'][int(self.frame)].composite_draw(0, 'h', self.x, self.y, 200, 200)
+            Zombie.images['Walk'][int(self.frame)].composite_draw(0, 'h', self.x, self.y, self.size_x, self.size_y)
         else:
-            Zombie.images['Walk'][int(self.frame)].draw(self.x, self.y, 200, 200)
+            Zombie.images['Walk'][int(self.frame)].draw(self.x, self.y, self.size_x, self.size_y)
         draw_rectangle(*self.get_bb())
 
     def handle_event(self, event):
@@ -59,7 +61,13 @@ class Zombie:
     def handle_collision(self, group, other):
         # fill here
         if group == 'zombie:ball':
-            print('zombie:ball')
+            if (self.die_cnt == 2):
+                self.size_x = 100
+                self.size_y = 100
+                self.y = self.y - self.size_y / 2
+                self.die_cnt -= 1
+            elif (self.die_cnt == 1):
+                game_world.remove_object(self)
         pass
 
     def get_bb(self):
